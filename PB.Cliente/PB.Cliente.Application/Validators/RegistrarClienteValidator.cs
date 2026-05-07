@@ -1,6 +1,7 @@
 using PB.Cliente.Application.Requests.Clientes;
 using FluentValidation;
 using System;
+using Sirb.Validation.Documents.BR.Validation;
 
 namespace PB.Cliente.Application.Validators
 {
@@ -21,7 +22,8 @@ namespace PB.Cliente.Application.Validators
                 .LessThan(DateOnly.FromDateTime(DateTime.Now)).WithMessage("A data de nascimento deve ser no passado.");
 
             RuleFor(x => x.Cpf)
-                .NotEmpty().WithMessage("O CPF é obrigatório.");
+                .NotEmpty().WithMessage("O CPF é obrigatório.")
+                .Must(cpf => CpfValidation.IsValid(cpf)).WithMessage("CPF inválido.");
             
             RuleFor(x => x.Rg)
                 .NotEmpty().WithMessage("O RG é obrigatório");
