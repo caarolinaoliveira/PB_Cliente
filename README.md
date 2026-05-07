@@ -4,7 +4,7 @@ Microsserviço responsável pelo cadastro de clientes via API REST. Ao registrar
 
 ## Tecnologias
 
-- .NET 8
+- .NET 10
 - ASP.NET Core Web API
 - Entity Framework Core + SQL Server
 - RabbitMQ.Client 6.8.1
