@@ -1,3 +1,4 @@
+using PB.Cliente.Domain.Exceptions;
 using PB.Cliente.Application.Interfaces;
 using System.Text.Json;
 using RabbitMQ.Client;
@@ -14,11 +15,13 @@ namespace PB.Cliente.Infrastructure.Messaging
             _connection = connection;
         }
 
-        public async Task PublicarAsync<T>(T evento, string fila) where T : class
+        public Task PublicarAsync<T>(T evento, string fila) where T : class
         {
             using var channel = _connection.CreateModel();
-
+            
+            channel.QueueDeclarePassive(fila);
             channel.ConfirmSelect();
+
             var json = JsonSerializer.Serialize(evento);
             var body = Encoding.UTF8.GetBytes(json);
 
@@ -32,13 +35,10 @@ namespace PB.Cliente.Infrastructure.Messaging
                 body: body
             );
 
-            var confirmado = channel.WaitForConfirms(timeout: TimeSpan.FromSeconds(5));
-            if (!confirmado)
-            {
-                throw new Exception("Falha ao publicar mensagem no RabbitMQ.");
-            }
-            
-            await Task.CompletedTask;
+            if (!channel.WaitForConfirms(TimeSpan.FromSeconds(5)))
+                throw new MessagePublishException($"Mensagem não confirmada pelo broker. Fila: '{fila}'.");
+
+            return Task.CompletedTask;
         }
     }
 }
