@@ -75,8 +75,9 @@ No arquivo `PB.Cliente.Presentation/appsettings.json`, configure as credenciais 
 ### 3. Aplicar migrations
 
 ```bash
-cd PB.Cliente/PB.Cliente.Infrastructure
-dotnet ef database update --startup-project ../PB.Cliente.Presentation
+cd PB.Cliente
+dotnet ef migrations add InicialCreate   --project PB.Cliente.Infrastructure --startup-project PB.Cliente.Presentation --context ClienteDbContext
+dotnet ef database update   --project PB.Cliente.Infrastructure --startup-project PB.Cliente.Presentation  --context PBClienteDbContext
 ```
 
 ### 4. Rodar a API
