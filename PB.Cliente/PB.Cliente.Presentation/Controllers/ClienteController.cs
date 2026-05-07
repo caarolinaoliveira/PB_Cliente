@@ -4,6 +4,7 @@ using PB.Cliente.Application.Services;
 using PB.Cliente.Application.Requests.Clientes;
 using PB.Cliente.Application.Responses.Clientes;
 using System.Net;
+using PB.Cliente.Application.Validators;
 
 namespace PB.Cliente.Presentation.Controllers
 {
@@ -23,6 +24,13 @@ namespace PB.Cliente.Presentation.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> RegistrarCliente(RegistrarClienteRequest request)
         {
+            var validator = new RegistrarClienteValidator();
+            var validationResult = validator.Validate(request);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
+            }
+
             var response = await _clienteService.RegistrarCliente(request);
             return CreatedAtAction(nameof(RegistrarCliente), new { id = response.Id }, response);
         }
