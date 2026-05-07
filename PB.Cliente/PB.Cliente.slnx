@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/Pb.Cliente.Application/" />
+  <Folder Name="/Pb.Cliente.Domain/" />
+  <Folder Name="/Pb.Cliente.Infrastructure/" />
+  <Folder Name="/Testes/">
+    <Project Path="Testes/PB.Cliente.Application.Tests/PB.Cliente.Application.Tests.csproj" />
+  </Folder>
+  <Project Path="PB.Cliente.Application/PB.Cliente.Application.csproj" />
+  <Project Path="PB.Cliente.Domain/PB.Cliente.Domain.csproj" />
+  <Project Path="PB.Cliente.Infrastructure/PB.Cliente.Infrastructure.csproj" />
+  <Project Path="PB.Cliente.Presentation/PB.Cliente.Presentation.csproj" />
+</Solution>
