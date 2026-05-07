@@ -7,7 +7,8 @@ using PB.Cliente.Application.Services;
 using PB.Cliente.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
-
+using FluentValidation;
+using PB.Cliente.Application.Validators;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,8 @@ builder.Services.AddSingleton<IConnection>(sp =>
 });
 
 builder.Services.AddScoped<IMessagePublisher, RabbitMQPublisher>();
+builder.Services.AddValidatorsFromAssemblyContaining<RegistrarClienteValidator>();
+
 var app = builder.Build();
 
 app.UseSwagger();
