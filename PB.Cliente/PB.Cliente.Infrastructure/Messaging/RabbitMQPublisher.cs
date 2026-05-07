@@ -18,13 +18,7 @@ namespace PB.Cliente.Infrastructure.Messaging
         {
             using var channel = _connection.CreateModel();
 
-            channel.QueueDeclare(
-                queue: fila,
-                durable: true,
-                exclusive: false,
-                autoDelete: false
-            );
-
+            channel.ConfirmSelect();
             var json = JsonSerializer.Serialize(evento);
             var body = Encoding.UTF8.GetBytes(json);
 
@@ -38,6 +32,12 @@ namespace PB.Cliente.Infrastructure.Messaging
                 body: body
             );
 
+            var confirmado = channel.WaitForConfirms(timeout: TimeSpan.FromSeconds(5));
+            if (!confirmado)
+            {
+                throw new Exception("Falha ao publicar mensagem no RabbitMQ.");
+            }
+            
             await Task.CompletedTask;
         }
     }
